@@ -16,7 +16,6 @@ export function getWeatherDataOnTimer(city?: string | null, format?: string) {
 	return timer(delay, interval).pipe(
 		switchMap(() => from(axios.get(url))),
 		switchMap((response: AxiosResponse) => {
-			new Notice("Weather data updated");
 			if (response.status !== 200) {
 				new Notice("Error fetching weather data");
 				return [];
