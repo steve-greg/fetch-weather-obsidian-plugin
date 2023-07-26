@@ -3,7 +3,7 @@ import { Notice } from "obsidian";
 import { from, shareReplay, switchMap, tap, timer } from "rxjs";
 
 const delay = 0;
-const interval = 300000;
+const interval = 150000;
 
 export function getWeatherDataOnTimer(city?: string | null, format?: string) {
 	var url = `https://wttr.in/`;
@@ -16,7 +16,7 @@ export function getWeatherDataOnTimer(city?: string | null, format?: string) {
 	return timer(delay, interval).pipe(
 		switchMap(() => from(axios.get(url))),
 		switchMap((response: AxiosResponse) => {
-			new Notice("Weather data updated");
+			new Notice("StatusBar: Fetching new weather data");
 			if (response.status !== 200) {
 				new Notice("Error fetching weather data");
 				return [];
@@ -29,6 +29,7 @@ export function getWeatherDataOnTimer(city?: string | null, format?: string) {
 
 export function getWeatherData(city: string) {
 	var url = `https://wttr.in/${city}?format=3`;
+	new Notice("Command: Fetching new weather data");
 	var promise = axios.get(url).then((response: AxiosResponse) => {
 		if (response.status !== 200) {
 			new Notice("Error fetching weather data");

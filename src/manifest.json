@@ -1,0 +1,10 @@
+{
+	"id": "fetch-weather",
+	"name": "Fetch Weather",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "This plugin will fetch the current weather for you location using wttr.in",
+	"author": "stevegreg",
+	"authorUrl": "https://github.com/steve-greg",
+	"isDesktopOnly": false
+}

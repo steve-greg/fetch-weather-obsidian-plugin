@@ -7,7 +7,7 @@ import {
 	Setting,
 } from "obsidian";
 
-import { getWeatherDataOnTimer, getWeatherData } from "get-weather-data";
+import { getWeatherDataOnTimer, getWeatherData } from "src/get-weather-data";
 
 // Remember to rename these classes and interfaces!
 

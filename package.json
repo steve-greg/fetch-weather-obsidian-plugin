@@ -2,11 +2,12 @@
 	"name": "fetch-weather-obsidian-plugin",
 	"version": "1.0.0",
 	"description": "This plugin will fetch the current weather for you location using wttr.in",
-	"main": "main.js",
+	"main": "src/main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"version": "node version-bump.mjs && git add manifest.json versions.json"
+		"version": "node version-bump.mjs && git add manifest.json versions.json",
+		"publish": "npm run build && node publish.js"
 	},
 	"keywords": [],
 	"author": "stevegreg",
@@ -17,6 +18,7 @@
 		"@typescript-eslint/parser": "5.29.0",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.17.3",
+		"esbuild-plugin-copy": "^2.1.1",
 		"obsidian": "latest",
 		"tslib": "2.4.0",
 		"typescript": "4.7.4"
