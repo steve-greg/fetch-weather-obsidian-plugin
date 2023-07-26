@@ -1,4 +1,4 @@
-# Obsidian Plugin Fetch Weather
+# Fetch Weather Obsidian Plugin
 
 ## How to use
 
