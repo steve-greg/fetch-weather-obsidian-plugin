@@ -9,7 +9,9 @@
 
 ## Manually installing the plugin
 
--   Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+-   Replace the path in the publish script in the `package.json` file with `VaultFolder/.obsidian/plugins/your-plugin-id/`
+-   Run `npm run publish` to build the plugin and copy it to the vault folder.
+-   Install the obsidian plugin hot reload if you want to automatically reload the plugin when you make changes.
 
 ## API Documentation
 

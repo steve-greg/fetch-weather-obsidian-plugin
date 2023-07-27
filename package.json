@@ -7,7 +7,7 @@
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json",
-		"publish": "npm run build && node publish.js"
+		"publish": "npm run build && node publish.js /Documents/Development/.obsidian/plugins/fetch-weather-plugin"
 	},
 	"keywords": [],
 	"author": "stevegreg",
