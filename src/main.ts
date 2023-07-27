@@ -1,69 +1,41 @@
-import {
-	App,
-	Editor,
-	Notice,
-	Plugin,
-	PluginSettingTab,
-	Setting,
-} from "obsidian";
+import { App, Notice, Plugin, PluginSettingTab, Setting } from "obsidian";
 
-import { getWeatherDataOnTimer, getWeatherData } from "src/get-weather-data";
+import { WeatherService } from "src/services/weather.service";
+import { WeatherSettings } from "./interfaces/settings.interface";
+import { WeatherParams } from "./interfaces/weatherParams.interface";
 
-// Remember to rename these classes and interfaces!
-
-interface FetchWeatherPluginSettings {
-	city: string;
-}
-
-const DEFAULT_SETTINGS: FetchWeatherPluginSettings = {
+const DEFAULT_SETTINGS: WeatherSettings = {
 	city: "London",
 };
 
 export default class FetchWeatherPlugin extends Plugin {
-	settings: FetchWeatherPluginSettings;
-	currentWeather: string;
-	fullWeather: string;
+	settings: WeatherSettings;
+	weatherService$: any;
+	weatherText: string;
 	statusBarItemEl = this.addStatusBarItem();
 
 	async onload() {
 		await this.loadSettings();
 
-		const weatherObserver = {
-			next: (value: any) => this.setWeatherToStatusBar(value),
-			error: (error: any) => this.setErrorNotice(error),
-			complete: () => console.log("done"),
+		// Create a new instance of the weather service
+		this.weatherService$ = new WeatherService();
+
+		// Set the weather params
+		const weatherParams: WeatherParams = {
+			city: this.settings.city,
+			format: "+%c+%t",
 		};
 
-		getWeatherDataOnTimer(this.settings.city, "+%c+%t").subscribe(
-			weatherObserver
-		);
+		// Set up the subscription to the weather service
+		// This block will fire when refresh() is called
+		// Or when autoRefresh() timer fires
+		this.weatherService$.subscribe(this.setWeatherToStatusBar.bind(this));
 
-		getWeatherData(this.settings.city).subscribe((value: any) => {
-			this.fullWeather = value;
-		});
-
-		// This adds a simple command that can be triggered anywhere
-		this.addCommand({
-			id: "insert-weather",
-			name: "Insert Weather",
-			editorCallback: (editor: Editor) => {
-				editor.replaceRange(this.fullWeather, editor.getCursor());
-			},
-		});
+		// Update the weather on a timer
+		this.weatherService$.autoRefresh(weatherParams, 0, 150000);
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new WeatherSettingTab(this.app, this));
-
-		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
-		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, "click", (evt: MouseEvent) => {
-			console.log("click", evt);
-		});
-
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		this.registerInterval(
-			window.setInterval(() => console.log("setInterval"), 5 * 60 * 1000)
-		);
 	}
 
 	onunload() {}
@@ -71,7 +43,7 @@ export default class FetchWeatherPlugin extends Plugin {
 	setWeatherToStatusBar(weather: string) {
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		this.statusBarItemEl.setText(weather);
-		this.currentWeather = weather;
+		this.weatherText = weather;
 	}
 
 	setErrorNotice(error: string) {
